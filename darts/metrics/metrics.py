@@ -154,14 +154,15 @@ def _get_values(
     with (stochastic_quantile {>=0,<=1})
     """
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("check with if statement if series is deterministic or stochastic:")
+    print("-> _get_values()")
+    print("(1) check with if statement if series is deterministic or stochastic:")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     if series.is_deterministic:
         series_values = series.univariate_values()
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("series is deterministic")
-        print(f"series values: {series_values}")
+        print(f"series values: {series_values.head()}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
     else:  # stochastic
@@ -169,7 +170,7 @@ def _get_values(
             series_values = series.all_values(copy=False)
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
             print("series is stochastic with stochastic_quantile set to None")
-            print(f"series values (returns all samples): {series_values}")
+            print(f"series values (returns all samples): {series_values.head()}")
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         else:
@@ -179,7 +180,7 @@ def _get_values(
 
             print("#=#=#=#=# INTERNAL #=#=#=#=#") 
             print("series is stochastic with stochastic_quantile specified")
-            print(f"series values (returns based on sample values): {series_values}") 
+            print(f"series values (returns based on sample values): {series_values.head()}") 
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
             
     return series_values
@@ -213,6 +214,7 @@ def _get_values_or_raise(
         in either of the two input series.
     """  
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("_get_values_or_raise()")
     print("check input datatype: raises error if not coherent")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
@@ -236,8 +238,8 @@ def _get_values_or_raise(
     series_b_common = series_b.slice_intersect(series_a) if intersect else series_b
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print(f"actual series (series_a_common): {series_a_common}")
-    print(f"pred series (series_b_common): {series_b_common}")
+    print(f"actual series (series_a_common): {series_a_common.head()}")
+    print(f"pred series (series_b_common): {series_b_common.head()}")
 
     print("check whether series_a_common and series_b_common have the same time index")
     print("rase error if not")
@@ -263,8 +265,8 @@ def _get_values_or_raise(
     series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print(f"actual series (series_a_det, return from _get_values): {series_a_det}")
-    print(f"pred series (series_b_det, return from _get_values): {series_b_det}")
+    print(f"actual series (series_a_det, return from _get_values): {series_a_det.head()}")
+    print(f"pred series (series_b_det, return from _get_values): {series_b_det.head()}")
     print("if statement is used to check whether remove_nan_union is set to False (default)")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
@@ -345,6 +347,7 @@ def mae(
     )
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> mae()")
     print("function call:")
     print("y1, y2 = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
     print(f"y1: {y1}")
@@ -408,6 +411,16 @@ def mse(
     y_true, y_pred = _get_values_or_raise(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
+    
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> mse()")
+    print("function call:")
+    print("y_true, y_pred = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
+    print(f"y_true: {y_true}")
+    print(f"y_pred: {y_pred}")
+    print("return np.mean of metric computation: np.mean((y_true - y_pred) ** 2)")
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    
     return np.mean((y_true - y_pred) ** 2)
 
 
@@ -654,6 +667,17 @@ def mape(
         "The actual series must be strictly positive to compute the MAPE.",
         logger,
     )
+        
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> mape()")
+    print("function call:")
+    print("y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
+    print(f"y_true: {y_true}")
+    print(f"y_hat: {y_hat}")
+    print("return np.mean of metric computation: 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))")
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    
+    
     return 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))
 
 
