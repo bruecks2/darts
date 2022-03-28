@@ -155,13 +155,13 @@ def _get_values(
     """
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     print("-> _get_values()")
-    print("(1) check with if statement if series is deterministic or stochastic:")
+    print("check with if statement if series is deterministic or stochastic:")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     if series.is_deterministic:
         series_values = series.univariate_values()
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("series is deterministic")
+        print("series is deterministic, returns following values:")
         print(f"series values: {series_values}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
@@ -169,7 +169,7 @@ def _get_values(
         if stochastic_quantile is None:
             series_values = series.all_values(copy=False)
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
-            print("series is stochastic with stochastic_quantile set to None")
+            print("series is stochastic with stochastic_quantile set to None, returns following values:")
             print(f"series values (returns all samples): {series_values}")
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
@@ -179,7 +179,7 @@ def _get_values(
             ).univariate_values()
 
             print("#=#=#=#=# INTERNAL #=#=#=#=#") 
-            print("series is stochastic with stochastic_quantile specified")
+            print("series is stochastic with stochastic_quantile specified, returns following values:")
             print(f"series values (returns based on sample values): {series_values}") 
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
             
@@ -214,8 +214,9 @@ def _get_values_or_raise(
         in either of the two input series.
     """  
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("_get_values_or_raise()")
+    print("-> _get_values_or_raise()")
     print("check input datatype: raises error if not coherent")
+    print("-> uses raise_if_not from darts.logging")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
     raise_if_not(
@@ -243,6 +244,7 @@ def _get_values_or_raise(
 
     print("check whether series_a_common and series_b_common have the same time index")
     print("rase error if not")
+    print("-> uses raise_if_not from darts.logging")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
     raise_if_not(
