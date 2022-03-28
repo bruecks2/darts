@@ -153,15 +153,33 @@ def _get_values(
     For stochastic series, return either all sample values with (stochastic_quantile=None) or the quantile sample value
     with (stochastic_quantile {>=0,<=1})
     """
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print("check with if statement if series is deterministic or stochastic")
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    
     if series.is_deterministic:
         series_values = series.univariate_values()
+        #=#=#=#=# INTERNAL #=#=#=#=#
+        print("series is deterministic")
+        print(f"series values: {series_values}")
+        #=#=#=#=# INTERNAL #=#=#=#=#
+
     else:  # stochastic
         if stochastic_quantile is None:
             series_values = series.all_values(copy=False)
+          #=#=#=#=# INTERNAL #=#=#=#=#
+          print("series is stochastic with stochastic_quantile set to None")
+          print(f"series values (returns all samples): {series_values}")
+          #=#=#=#=# INTERNAL #=#=#=#=#
+        
         else:
             series_values = series.quantile_timeseries(
                 quantile=stochastic_quantile
             ).univariate_values()
+          #=#=#=#=# INTERNAL #=#=#=#=#
+          print("series is stochastic with stochastic_quantile specified")
+          print(f"series values (returns based on sample values): {series_values}")
+          #=#=#=#=# INTERNAL #=#=#=#=#
     return series_values
 
 
@@ -192,6 +210,9 @@ def _get_values_or_raise(
         By setting `remove_non_union` to True, remove all indices from `series_a` and `series_b` which have a NaN value
         in either of the two input series.
     """
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print("check input datatype: raise error if not coherent")
+    #=#=#=#=# INTERNAL #=#=#=#=#
 
     raise_if_not(
         series_a.width == series_b.width,
@@ -200,9 +221,23 @@ def _get_values_or_raise(
     )
 
     raise_if_not(isinstance(intersect, bool), "The intersect parameter must be a bool")
-
+    
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print("if intersect is set to true, slice both series and keep intersect")
+    print("if intersect is set to false, keep entire series")
+    print("store under series_[a/b]_common")
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    
     series_a_common = series_a.slice_intersect(series_b) if intersect else series_a
     series_b_common = series_b.slice_intersect(series_a) if intersect else series_b
+
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print(f"actual series (series_a_common): {series_a_common}")
+    print(f"pred series (series_b_common): {series_b_common}")
+
+    print("check whether series_a_common and series_b_common have the same time index")
+    print("rase error if not")
+    #=#=#=#=# INTERNAL #=#=#=#=#
 
     raise_if_not(
         series_a_common.has_same_time_as(series_b_common),
@@ -214,10 +249,25 @@ def _get_values_or_raise(
         logger,
     )
 
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print("call _get_values function")
+    print("series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)")
+    print("series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)")
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    
     series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)
     series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)
 
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print(f"actual series (series_a_det, return from _get_values): {series_a_det}")
+    print(f"pred series (series_b_det, return from _get_values): {series_b_det}")
+    print("if statement is used to check whether remove_nan_union is set to False (default)")
+    #=#=#=#=# INTERNAL #=#=#=#=#
+
     if not remove_nan_union:
+        #=#=#=#=# INTERNAL #=#=#=#=#
+        print("remove_nan_union is set to False (default), series_a_det and series_b_det are returned")
+        #=#=#=#=# INTERNAL #=#=#=#=#
         return series_a_det, series_b_det
 
     b_is_deterministic = bool(len(series_b_det.shape) == 1)
@@ -227,6 +277,9 @@ def _get_values_or_raise(
         isnan_mask = np.logical_or(
             np.isnan(series_a_det), np.isnan(series_b_det).any(axis=2).flatten()
         )
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print("check again if b is deterministic and the use if statement for nan removal")
+    #=#=#=#=# INTERNAL #=#=#=#=#
     return np.delete(series_a_det, isnan_mask), np.delete(
         series_b_det, isnan_mask, axis=0
     )
@@ -286,6 +339,14 @@ def mae(
     y1, y2 = _get_values_or_raise(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
+
+    #=#=#=#=# INTERNAL #=#=#=#=#
+    print("function call:")
+    print("y1, y2 = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
+    print(f"y1: {y1}")
+    print(f"y2: {y2}")
+    print("return np.mean of metric computation")
+    #=#=#=#=# INTERNAL #=#=#=#=#
     return np.mean(np.abs(y1 - y2))
 
 
