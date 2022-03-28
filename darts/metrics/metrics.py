@@ -162,7 +162,7 @@ def _get_values(
         series_values = series.univariate_values()
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("series is deterministic")
-        print(f"series values: {series_values.head()}")
+        print(f"series values: {series_values}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
     else:  # stochastic
@@ -170,7 +170,7 @@ def _get_values(
             series_values = series.all_values(copy=False)
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
             print("series is stochastic with stochastic_quantile set to None")
-            print(f"series values (returns all samples): {series_values.head()}")
+            print(f"series values (returns all samples): {series_values}")
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         else:
@@ -180,7 +180,7 @@ def _get_values(
 
             print("#=#=#=#=# INTERNAL #=#=#=#=#") 
             print("series is stochastic with stochastic_quantile specified")
-            print(f"series values (returns based on sample values): {series_values.head()}") 
+            print(f"series values (returns based on sample values): {series_values}") 
             print("#=#=#=#=# INTERNAL #=#=#=#=#")
             
     return series_values
@@ -238,8 +238,8 @@ def _get_values_or_raise(
     series_b_common = series_b.slice_intersect(series_a) if intersect else series_b
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print(f"actual series (series_a_common): {series_a_common.head()}")
-    print(f"pred series (series_b_common): {series_b_common.head()}")
+    print(f"actual series (series_a_common): {series_a_common}")
+    print(f"pred series (series_b_common): {series_b_common}")
 
     print("check whether series_a_common and series_b_common have the same time index")
     print("rase error if not")
@@ -265,8 +265,8 @@ def _get_values_or_raise(
     series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print(f"actual series (series_a_det, return from _get_values): {series_a_det.head()}")
-    print(f"pred series (series_b_det, return from _get_values): {series_b_det.head()}")
+    print(f"actual series (series_a_det, return from _get_values): {series_a_det}")
+    print(f"pred series (series_b_det, return from _get_values): {series_b_det}")
     print("if statement is used to check whether remove_nan_union is set to False (default)")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
