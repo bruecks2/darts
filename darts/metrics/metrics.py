@@ -176,10 +176,10 @@ def _get_values(
             series_values = series.quantile_timeseries(
                 quantile=stochastic_quantile
             ).univariate_values()
-          #=#=#=#=# INTERNAL #=#=#=#=#
-          print("series is stochastic with stochastic_quantile specified")
-          print(f"series values (returns based on sample values): {series_values}")
-          #=#=#=#=# INTERNAL #=#=#=#=#
+            #=#=#=#=# INTERNAL #=#=#=#=#
+            print("series is stochastic with stochastic_quantile specified")
+            print(f"series values (returns based on sample values): {series_values}")
+            #=#=#=#=# INTERNAL #=#=#=#=#
     return series_values
 
 
