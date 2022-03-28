@@ -167,10 +167,10 @@ def _get_values(
     else:  # stochastic
         if stochastic_quantile is None:
             series_values = series.all_values(copy=False)
-          #=#=#=#=# INTERNAL #=#=#=#=#
-          print("series is stochastic with stochastic_quantile set to None")
-          print(f"series values (returns all samples): {series_values}")
-          #=#=#=#=# INTERNAL #=#=#=#=#
+            #=#=#=#=# INTERNAL #=#=#=#=#
+            print("series is stochastic with stochastic_quantile set to None")
+            print(f"series values (returns all samples): {series_values}")
+            #=#=#=#=# INTERNAL #=#=#=#=#
         
         else:
             series_values = series.quantile_timeseries(
