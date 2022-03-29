@@ -146,6 +146,11 @@ def multivariate_support(func):
     @wraps(func)
     def wrapper_multivariate_support(*args, **kwargs):
         # we can avoid checks about args and kwargs since the input is adjusted by the previous decorator
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("-> warpper_multivariate_support")
+        print("initiate actual_series, pred_series from args")
+        print("checks length raises error if not")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         actual_series = args[0]
         pred_series = args[1]
 
@@ -165,6 +170,13 @@ def multivariate_support(func):
                     **kwargs
                 )
             )  # [2:] since we already know the first two arguments are the series
+        
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("-> warpper_multivariate_support")
+        print("for each i in actual / pred series, put func(i_actual,i_pred) in value_list: {value_list}")
+        print("return kwargs['reduction'](value_list) or with default function")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        
         if "reduction" in kwargs:
             return kwargs["reduction"](value_list)
         else:
