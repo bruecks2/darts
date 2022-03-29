@@ -124,7 +124,7 @@ def multi_ts_support(func):
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("if func reduces output sequence to single value, return value")
-        print("else return kwargs["inter_reduction"](value_list) or default inter_reduction")
+        print("else return kwargs['inter_reduction'](value_list) or default inter_reduction")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         if len(value_list) == 1:
             value_list = value_list[0]
