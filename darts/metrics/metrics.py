@@ -96,16 +96,15 @@ def multi_ts_support(func):
         kwargs.pop("actual_series", 0)
         kwargs.pop("pred_series", 0)
 
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: create iterator to zip actual and pred series")
-        print(f"{iterator}")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         iterator = _build_tqdm_iterator(
             iterable=zip(actual_series, pred_series),
             verbose=verbose,
             total=len(actual_series),
         )
-
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: create iterator to zip actual and pred series")
+        print(f"{iterator}")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("in func: compute metrics list")
         print(f"{value_list}")
