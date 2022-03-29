@@ -37,16 +37,16 @@ def multi_ts_support(func):
     evaluation regarding different ``TimeSeries`` (if the `n_jobs` parameter is not set 1).
     """
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("->multi_ts_support()")
+    print("-> func multi_ts_support()")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     @wraps(func)
     def wrapper_multi_ts_support(*args, **kwargs):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("defines outout function wrapper_multi_ts_support:")
-        print("in func: get actual series from kwargs / args")
-        print("in func: get pred series from kwargs / args")
+        print("-> func wrapper_multi_ts_support()")
+        print("func wrapper_multi_ts_support(): get actual series, pred_series, n_jobs, verbose from args/kwargs/default")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        
         actual_series = (
             kwargs["actual_series"] if "actual_series" in kwargs else args[0]
         )
@@ -58,19 +58,14 @@ def multi_ts_support(func):
             else args[1]
         )
 
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: get n_jobs from kwargs / default")
-        print("in func: get verbose from kwargs / default")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         n_jobs = kwargs.pop("n_jobs", signature(func).parameters["n_jobs"].default)
         verbose = kwargs.pop("verbose", signature(func).parameters["verbose"].default)
 
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: check data types")
-        print("in func: -> raise_if_not if not coherent")
-        print("in func: check if length of actual and pred series match")
-        print("in func: -> raise_if_not if not coherent")
+        print("func wrapper_multi_ts_support(): check data types, raise error if not coherent -> func raise_if_not()")
+        print("func wrapper_multi_ts_support(): check if actual series and pred series have same length, raise error if not coherent -> func raise_if_not()")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        
         raise_if_not(isinstance(n_jobs, int), "n_jobs must be an integer")
         raise_if_not(isinstance(verbose, bool), "verbose must be a bool")
         
@@ -101,6 +96,11 @@ def multi_ts_support(func):
             total=len(actual_series),
         )
 
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("func wrapper_multi_ts_support(): create iterator to zip actual and pred series")
+        print(f"{iterator}")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        
         value_list = _parallel_apply(
             iterator=iterator,
             fn=func,
@@ -114,16 +114,13 @@ def multi_ts_support(func):
         # return a single value instead of a np.array of len 1
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: create iterator to zip actual and pred series")
-        print(f"{iterator}")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: compute metrics list")
+        print("func wrapper_multi_ts_support(): create value list from iterator with function")
         print(f"{value_list}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
+
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("if func reduces output sequence to single value, return value")
-        print("else return kwargs['inter_reduction'](value_list) or default inter_reduction")
+        print("func wrapper_multi_ts_support(): if func reduces output sequence to single value, return value")
+        print("func wrapper_multi_ts_support(): else return kwargs['inter_reduction'](value_list) or default inter_reduction")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         if len(value_list) == 1:
             value_list = value_list[0]
@@ -142,15 +139,18 @@ def multivariate_support(func):
     metrics for components with the same indices, and returns a float value that is computed as a function of all the
     univariate metrics using a `reduction` subroutine passed as argument to the metric function.
     """
-
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> func multivariate_support()")
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    
     @wraps(func)
     def wrapper_multivariate_support(*args, **kwargs):
         # we can avoid checks about args and kwargs since the input is adjusted by the previous decorator
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("-> warpper_multivariate_support")
-        print("initiate actual_series, pred_series from args")
-        print("checks length raises error if not")
+        print("-> func wrapper_multivariate_support()")
+        print("func wrapper_multivariate_support(): get actual series, pred_series from args; check if length is equal, raise error if not -> func raise_if_not()")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
+
         actual_series = args[0]
         pred_series = args[1]
 
@@ -172,9 +172,8 @@ def multivariate_support(func):
             )  # [2:] since we already know the first two arguments are the series
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("-> warpper_multivariate_support")
-        print("for each i in actual / pred series, put func(i_actual,i_pred) in value_list: {value_list}")
-        print("return kwargs['reduction'](value_list) or with default function")
+        print("func warpper_multivariate_support: for each i in actual / pred series, put func(i_actual,i_pred) in value_list: {value_list}")
+        print("func warpper_multivariate_support: return kwargs['reduction'](value_list) or with default function")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         if "reduction" in kwargs:
