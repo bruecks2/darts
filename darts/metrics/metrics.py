@@ -37,9 +37,17 @@ def multi_ts_support(func):
     If a 'Sequence[TimeSeries]' is passed as input, this decorator provides also parallelisation of the metric
     evaluation regarding different ``TimeSeries`` (if the `n_jobs` parameter is not set 1).
     """
-
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("->multi_ts_support()")
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    
     @wraps(func)
     def wrapper_multi_ts_support(*args, **kwargs):
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("defines outout function wrapper_multi_ts_support:")
+        print("in func: get actual series from kwargs / args")
+        print("in func: get pred series from kwargs / args")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         actual_series = (
             kwargs["actual_series"] if "actual_series" in kwargs else args[0]
         )
@@ -51,12 +59,22 @@ def multi_ts_support(func):
             else args[1]
         )
 
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: get n_jobs from kwargs / default")
+        print("in func: get verbose from kwargs / default")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         n_jobs = kwargs.pop("n_jobs", signature(func).parameters["n_jobs"].default)
         verbose = kwargs.pop("verbose", signature(func).parameters["verbose"].default)
 
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: check data types")
+        print("in func: -> raise_if_not if not coherent")
+        print("in func: check if length of actual and pred series match")
+        print("in func: -> raise_if_not if not coherent")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         raise_if_not(isinstance(n_jobs, int), "n_jobs must be an integer")
         raise_if_not(isinstance(verbose, bool), "verbose must be a bool")
-
+        
         actual_series = (
             [actual_series]
             if not isinstance(actual_series, Sequence)
@@ -78,12 +96,20 @@ def multi_ts_support(func):
         kwargs.pop("actual_series", 0)
         kwargs.pop("pred_series", 0)
 
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: create iterator to zip actual and pred series")
+        print(f"{iterator}")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         iterator = _build_tqdm_iterator(
             iterable=zip(actual_series, pred_series),
             verbose=verbose,
             total=len(actual_series),
         )
 
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: compute metrics list")
+        print(f"{value_list}")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         value_list = _parallel_apply(
             iterator=iterator,
             fn=func,
@@ -95,7 +121,11 @@ def multi_ts_support(func):
         # in case the reduction is not reducing the metrics sequence to a single value, e.g., if returning the
         # np.ndarray of values with the identity function, we must handle the single TS case, where we should
         # return a single value instead of a np.array of len 1
-
+        
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("if func reduces output sequence to single value, return value")
+        print("else return kwargs["inter_reduction"](value_list) or default inter_reduction")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         if len(value_list) == 1:
             value_list = value_list[0]
 
