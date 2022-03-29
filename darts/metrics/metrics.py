@@ -116,11 +116,9 @@ def multi_ts_support(func):
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("in func: create iterator to zip actual and pred series")
-        print(f"{iterator}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("in func: compute metrics list")
-        print(f"{value_list}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("if func reduces output sequence to single value, return value")
