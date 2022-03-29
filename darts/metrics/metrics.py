@@ -97,7 +97,7 @@ def multi_ts_support(func):
         )
 
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func wrapper_multi_ts_support(): create iterator to zip actual and pred series")
+        print("func wrapper_multi_ts_support(): calls -> _build_tqdm_iterator to create iterator to zip actual and pred series")
         print(f"{iterator}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
@@ -114,7 +114,8 @@ def multi_ts_support(func):
         # return a single value instead of a np.array of len 1
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func wrapper_multi_ts_support(): create value list from iterator with function")
+        print("func wrapper_multi_ts_support(): calls -> _parallel_apply create value list from iterator with function")
+        print("func wrapper_multi_ts_support(): _parallel_apply parallelizes the execution of a function over an iterator")
         print(f"{value_list}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
