@@ -697,7 +697,7 @@ def mape(
         
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     print("-> mape()")
-    print("-> call:("y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
+    print("-> call:(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
     print(f"y_true: {y_true}")
     print(f"y_hat: {y_hat}")
     print("return np.mean of metric computation: 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))")
