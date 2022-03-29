@@ -101,14 +101,7 @@ def multi_ts_support(func):
             verbose=verbose,
             total=len(actual_series),
         )
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: create iterator to zip actual and pred series")
-        print(f"{iterator}")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("in func: compute metrics list")
-        print(f"{value_list}")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+
         value_list = _parallel_apply(
             iterator=iterator,
             fn=func,
@@ -121,6 +114,14 @@ def multi_ts_support(func):
         # np.ndarray of values with the identity function, we must handle the single TS case, where we should
         # return a single value instead of a np.array of len 1
         
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: create iterator to zip actual and pred series")
+        print(f"{iterator}")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("in func: compute metrics list")
+        print(f"{value_list}")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("if func reduces output sequence to single value, return value")
         print("else return kwargs['inter_reduction'](value_list) or default inter_reduction")
