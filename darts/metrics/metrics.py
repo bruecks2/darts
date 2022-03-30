@@ -168,7 +168,7 @@ def multivariate_support(func):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("-> func wrapper_multivariate_support()")
         print("func wrapper_multivariate_support(): get actual series, pred_series from args; check if length is equal, raise error if not -> func raise_if_not()")
-        print("next: create value list -> calls func (_get_values_raise)
+        print("next: create value list -> calls func (_get_values_raise)")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
         value_list = []
