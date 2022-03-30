@@ -43,7 +43,7 @@ def multi_ts_support(func):
     @wraps(func)
     def wrapper_multi_ts_support(*args, **kwargs):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("-> executes func wrapper_multi_ts_support()")
+        print("-> executes func wrapper_multi_ts_support() - decorator")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         actual_series = (
@@ -102,7 +102,7 @@ def multi_ts_support(func):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("func wrapper_multi_ts_support(): called -> _build_tqdm_iterator to create iterator to zip actual and pred series")
         print(f"{iterator}")
-        print("next: calls _parallel_apply() -> second decorator is called -> wrapper_multivariate_support")
+        print("next: calls _parallel_apply(fn=func) -> second decorator is called -> wrapper_multivariate_support")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         value_list = _parallel_apply(
@@ -118,8 +118,7 @@ def multi_ts_support(func):
         # return a single value instead of a np.array of len 1
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func wrapper_multi_ts_support(): calls -> _parallel_apply create value list from iterator with function")
-        print("func wrapper_multi_ts_support(): _parallel_apply parallelizes the execution of a function over an iterator")
+        print(f"func wrapper_multi_ts_support(): called -> _parallel_apply create value list from iterator with function: {func}")
         print(f"{value_list}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
@@ -168,7 +167,7 @@ def multivariate_support(func):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("-> func wrapper_multivariate_support()")
         print("func wrapper_multivariate_support(): get actual series, pred_series from args; check if length is equal, raise error if not -> func raise_if_not()")
-        print("next: create value list -> calls func (_get_values_raise)")
+        print("next: create value list -> calls func (mape)")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
         value_list = []
@@ -183,7 +182,7 @@ def multivariate_support(func):
             )  # [2:] since we already know the first two arguments are the series
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func warpper_multivariate_support: for each i in actual / pred series, put func(i_actual,i_pred) in value_list: {value_list}")
+        print("func warpper_multivariate_support:  calculte output: for each i in actual / pred series, put func(i_actual,i_pred) in value_list: {value_list}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         if "reduction" in kwargs:
