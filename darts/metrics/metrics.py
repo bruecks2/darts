@@ -100,8 +100,9 @@ def multi_ts_support(func):
         )
 
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func wrapper_multi_ts_support(): calls -> _build_tqdm_iterator to create iterator to zip actual and pred series")
+        print("func wrapper_multi_ts_support(): called -> _build_tqdm_iterator to create iterator to zip actual and pred series")
         print(f"{iterator}")
+        print("next: calls _parallel_apply() -> second decorator is called -> wrapper_multivariate_support")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         value_list = _parallel_apply(
@@ -167,6 +168,7 @@ def multivariate_support(func):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("-> func wrapper_multivariate_support()")
         print("func wrapper_multivariate_support(): get actual series, pred_series from args; check if length is equal, raise error if not -> func raise_if_not()")
+        print("next: create value list -> calls func (_get_values_raise)
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
         value_list = []
@@ -298,15 +300,14 @@ def _get_values_or_raise(
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     print("func _get_values_or_raise: check whether series_a_common and series_b_common have the same time index, rase error if not -> raise_if_not")
+    print("next: -> call _get_values()
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)
     series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)
     
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> call _get_values function")
-    print("series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)")
-    print("series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)")
+    print("-> called _get_values function and returned:")
     print(f"func _get_values_or_raise: actual series (series_a_det, return from _get_values): {series_a_det}")
     print(f"func _get_values_or_raise: pred series (series_b_det, return from _get_values): {series_b_det}")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
@@ -697,12 +698,14 @@ def mape(
     float
         The Mean Absolute Percentage Error (MAPE)
     """
-
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> call mape()")
+    print("-> next :(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
     y_true, y_hat = _get_values_or_raise(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> mape()")
     print("-> called :(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
     print(f"y_true: {y_true}")
     print(f"y_hat: {y_hat}")
