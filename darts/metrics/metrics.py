@@ -95,7 +95,7 @@ def multi_ts_support(func):
         print("func wrapper_multi_ts_support(): initial part of multi_ts_support: get args; check datatypes, length: build iterator")
         print("func wrapper_multi_ts_support(): called -> _build_tqdm_iterator to create iterator to zip actual and pred series")
         print(f"{iterator}")
-        print("next: create value list -> calls decorated metric function: multi_ts_support(metric function)")
+        print("next: create value list -> calls decorated metric function: multivariate_support(metric function)")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         value_list = _parallel_apply(
