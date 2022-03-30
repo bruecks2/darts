@@ -300,7 +300,7 @@ def _get_values_or_raise(
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     print("func _get_values_or_raise: check whether series_a_common and series_b_common have the same time index, rase error if not -> raise_if_not")
-    print("next: -> call _get_values()
+    print("next: -> call _get_values()")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)
