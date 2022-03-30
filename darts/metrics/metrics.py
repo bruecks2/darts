@@ -37,14 +37,13 @@ def multi_ts_support(func):
     evaluation regarding different ``TimeSeries`` (if the `n_jobs` parameter is not set 1).
     """
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> func multi_ts_support()")
+    print("-> executes func multi_ts_support() that takes in metric function and adapts it")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     @wraps(func)
     def wrapper_multi_ts_support(*args, **kwargs):
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("-> func wrapper_multi_ts_support()")
-        print("func wrapper_multi_ts_support(): get actual series, pred_series, n_jobs, verbose from args/kwargs/default")
+        print("-> executes func wrapper_multi_ts_support()")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         actual_series = (
@@ -60,10 +59,9 @@ def multi_ts_support(func):
 
         n_jobs = kwargs.pop("n_jobs", signature(func).parameters["n_jobs"].default)
         verbose = kwargs.pop("verbose", signature(func).parameters["verbose"].default)
-
+        
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func wrapper_multi_ts_support(): check data types, raise error if not coherent -> func raise_if_not()")
-        print("func wrapper_multi_ts_support(): check if actual series and pred series have same length, raise error if not coherent -> func raise_if_not()")
+        print("func wrapper_multi_ts_support(): get actual series, pred_series, n_jobs, verbose from args/kwargs/default")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         raise_if_not(isinstance(n_jobs, int), "n_jobs must be an integer")
@@ -90,6 +88,11 @@ def multi_ts_support(func):
         kwargs.pop("actual_series", 0)
         kwargs.pop("pred_series", 0)
 
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("func wrapper_multi_ts_support(): check data types, raise error if not coherent -> func raise_if_not()")
+        print("func wrapper_multi_ts_support(): check if actual series and pred series have same length, raise error if not coherent -> func raise_if_not()")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        
         iterator = _build_tqdm_iterator(
             iterable=zip(actual_series, pred_series),
             verbose=verbose,
@@ -119,10 +122,6 @@ def multi_ts_support(func):
         print(f"{value_list}")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func wrapper_multi_ts_support(): if func reduces output sequence to single value, return value")
-        print("func wrapper_multi_ts_support(): else return kwargs['inter_reduction'](value_list) or default inter_reduction")
-        print("#=#=#=#=# INTERNAL #=#=#=#=#")
         if len(value_list) == 1:
             value_list = value_list[0]
 
@@ -130,7 +129,11 @@ def multi_ts_support(func):
             return kwargs["inter_reduction"](value_list)
         else:
             return signature(func).parameters["inter_reduction"].default(value_list)
-
+        
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("func wrapper_multi_ts_support(): if func reduces output sequence to single value, return value")
+        print("func wrapper_multi_ts_support(): else return kwargs['inter_reduction'](value_list) or default inter_reduction")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
     return wrapper_multi_ts_support
 
 def multivariate_support(func):
@@ -141,15 +144,15 @@ def multivariate_support(func):
     univariate metrics using a `reduction` subroutine passed as argument to the metric function.
     """
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> func multivariate_support()")
+    print("-> execute func multivariate_support()")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     @wraps(func)
     def wrapper_multivariate_support(*args, **kwargs):
         # we can avoid checks about args and kwargs since the input is adjusted by the previous decorator
+        
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("-> func wrapper_multivariate_support()")
-        print("func wrapper_multivariate_support(): get actual series, pred_series from args; check if length is equal, raise error if not -> func raise_if_not()")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
         actual_series = args[0]
@@ -160,6 +163,11 @@ def multivariate_support(func):
             "The two TimeSeries instances must have the same width.",
             logger,
         )
+        
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("-> func wrapper_multivariate_support()")
+        print("func wrapper_multivariate_support(): get actual series, pred_series from args; check if length is equal, raise error if not -> func raise_if_not()")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
         value_list = []
         for i in range(actual_series.width):
@@ -174,14 +182,17 @@ def multivariate_support(func):
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         print("func warpper_multivariate_support: for each i in actual / pred series, put func(i_actual,i_pred) in value_list: {value_list}")
-        print("func warpper_multivariate_support: return kwargs['reduction'](value_list) or with default function")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
         if "reduction" in kwargs:
             return kwargs["reduction"](value_list)
         else:
             return signature(func).parameters["reduction"].default(value_list)
-
+        
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        print("func warpper_multivariate_support: return kwargs['reduction'](value_list) or with default function")
+        print("#=#=#=#=# INTERNAL #=#=#=#=#")
+        
     return wrapper_multivariate_support
 
 
@@ -252,7 +263,6 @@ def _get_values_or_raise(
     """  
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     print("-> _get_values_or_raise()")
-    print("func _get_values_or_raise: check input datatype, raises error if not coherent")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
     raise_if_not(
@@ -264,16 +274,16 @@ def _get_values_or_raise(
     raise_if_not(isinstance(intersect, bool), "The intersect parameter must be a bool")
     
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("func _get_values_or_raise: set variable series_a/b_common by keeping common intersect")
+    print("func _get_values_or_raise: check input datatype, raises error if not coherent")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     series_a_common = series_a.slice_intersect(series_b) if intersect else series_a
     series_b_common = series_b.slice_intersect(series_a) if intersect else series_b
-
+    
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("func _get_values_or_raise: set variable series_a/b_common by keeping common intersect")
     print(f"func _get_values_or_raise: actual series (series_a_common): {series_a_common}")
     print(f"func _get_values_or_raise: pred series (series_b_common): {series_b_common}")
-    print("func _get_values_or_raise: check whether series_a_common and series_b_common have the same time index, rase error if not -> raise_if_not")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
     raise_if_not(
@@ -287,15 +297,16 @@ def _get_values_or_raise(
     )
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> call _get_values function")
-    print("series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)")
-    print("series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)")
+    print("func _get_values_or_raise: check whether series_a_common and series_b_common have the same time index, rase error if not -> raise_if_not")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)
     series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)
-
+    
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> call _get_values function")
+    print("series_a_det = _get_values(series_a_common, stochastic_quantile=stochastic_quantile)")
+    print("series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)")
     print(f"func _get_values_or_raise: actual series (series_a_det, return from _get_values): {series_a_det}")
     print(f"func _get_values_or_raise: pred series (series_b_det, return from _get_values): {series_b_det}")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
@@ -690,6 +701,14 @@ def mape(
     y_true, y_hat = _get_values_or_raise(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> mape()")
+    print("-> called :(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
+    print(f"y_true: {y_true}")
+    print(f"y_hat: {y_hat}")
+    print("return np.mean of metric computation: 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))")
+    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    
     raise_if_not(
         (y_true != 0).all(),
         "The actual series must be strictly positive to compute the MAPE.",
@@ -697,14 +716,9 @@ def mape(
     )
         
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> mape()")
-    print("-> call:(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
-    print(f"y_true: {y_true}")
-    print(f"y_hat: {y_hat}")
     print("return np.mean of metric computation: 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    
-    
+   
     return 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))
 
 
