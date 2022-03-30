@@ -158,9 +158,8 @@ def multivariate_support(func):
         )
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("-> func wrapper_multivariate_support()")
         print("func wrapper_multivariate_support(): initial part of decoration: get args; perform checks")
-        print("next: create value list -> calls decorated metric function: multi_ts_support(metric function)")
+        print("next: create value list -> calls metric function: (metric function())")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
         value_list = []
@@ -184,7 +183,7 @@ def multivariate_support(func):
             return signature(func).parameters["reduction"].default(value_list)
         
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
-        print("func warpper_multivariate_support: return kwargs['reduction'](value_list) or with default function")
+        print("func warpper_multivariate_support: end part of multivariate_support() return kwargs['reduction'](value_list) or with default function")
         print("#=#=#=#=# INTERNAL #=#=#=#=#")
         
     return wrapper_multivariate_support
@@ -268,7 +267,7 @@ def _get_values_or_raise(
     raise_if_not(isinstance(intersect, bool), "The intersect parameter must be a bool")
     
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("func _get_values_or_raise: check input datatype, raises error if not coherent")
+    print("func _get_values_or_raise: check input datatype")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     series_a_common = series_a.slice_intersect(series_b) if intersect else series_a
@@ -291,7 +290,7 @@ def _get_values_or_raise(
     )
 
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("func _get_values_or_raise: check whether series_a_common and series_b_common have the same time index, rase error if not -> raise_if_not")
+    print("func _get_values_or_raise: check whether series_a_common and series_b_common have the same time index")
     print("next: -> call _get_values()")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
@@ -299,9 +298,8 @@ def _get_values_or_raise(
     series_b_det = _get_values(series_b_common, stochastic_quantile=stochastic_quantile)
     
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> called _get_values function and returned:")
-    print(f"func _get_values_or_raise: actual series (series_a_det, return from _get_values): {series_a_det}")
-    print(f"func _get_values_or_raise: pred series (series_b_det, return from _get_values): {series_b_det}")
+    print(f"-> called _get_values function and returned: actual series (series_a_det) {series_a_det}")
+    print(f"-> called _get_values function and returned: pred series (series_b_det) {series_b_det}")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
 
     if not remove_nan_union:
@@ -378,14 +376,6 @@ def mae(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
 
-    print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> mae()")
-    print("function call:")
-    print("y1, y2 = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
-    print(f"y1: {y1}")
-    print(f"y2: {y2}")
-    print("return np.mean of metric computation: np.mean(np.abs(y1 - y2))")
-    print("#=#=#=#=# INTERNAL #=#=#=#=#")
     return np.mean(np.abs(y1 - y2))
 
 
@@ -443,15 +433,6 @@ def mse(
     y_true, y_pred = _get_values_or_raise(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
-    
-    print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> mse()")
-    print("function call:")
-    print("y_true, y_pred = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
-    print(f"y_true: {y_true}")
-    print(f"y_pred: {y_pred}")
-    print("return np.mean of metric computation: np.mean((y_true - y_pred) ** 2)")
-    print("#=#=#=#=# INTERNAL #=#=#=#=#")
     
     return np.mean((y_true - y_pred) ** 2)
 
@@ -697,12 +678,7 @@ def mape(
     y_true, y_hat = _get_values_or_raise(
         actual_series, pred_series, intersect, remove_nan_union=True
     )
-    print("#=#=#=#=# INTERNAL #=#=#=#=#")
-    print("-> called :(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
-    print(f"y_true: {y_true}")
-    print(f"y_hat: {y_hat}")
-    print("return np.mean of metric computation: 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))")
-    print("#=#=#=#=# INTERNAL #=#=#=#=#")
+
     
     raise_if_not(
         (y_true != 0).all(),
@@ -711,6 +687,7 @@ def mape(
     )
         
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
+    print("-> called :(y_true, y_hat = _get_values_or_raise(actual_series, pred_series, intersect, remove_nan_union=True")
     print("return np.mean of metric computation: 100.0 * np.mean(np.abs((y_true - y_hat) / y_true))")
     print("#=#=#=#=# INTERNAL #=#=#=#=#")
    
