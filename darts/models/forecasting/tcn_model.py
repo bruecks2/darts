@@ -183,9 +183,6 @@ class _TCNModule(PLPastCovariatesModule):
 
         super().__init__(**kwargs)
 
-        # required for all modules -> saves hparams for checkpoints
-        self.save_hyperparameters()
-
         # Defining parameters
         self.input_size = input_size
         self.n_filters = num_filters
@@ -233,7 +230,8 @@ class _TCNModule(PLPastCovariatesModule):
             self.res_blocks_list.append(res_block)
         self.res_blocks = nn.ModuleList(self.res_blocks_list)
 
-    def forward(self, x):
+    def forward(self, x_in: Tuple):
+        x, _ = x_in
         # data is of size (batch_size, input_chunk_length, input_size)
         batch_size = x.size(0)
         x = x.transpose(1, 2)
@@ -299,6 +297,9 @@ class TCNModel(PastCovariatesTorchModel):
             PyTorch loss function used for training.
             This parameter will be ignored for probabilistic models if the ``likelihood`` parameter is specified.
             Default: ``torch.nn.MSELoss()``.
+        torch_metrics
+            A torch metric or a ``MetricCollection`` used for evaluation. A full list of available metrics can be found
+            at https://torchmetrics.readthedocs.io/en/latest/. Default: ``None``.
         likelihood
             One of Darts' :meth:`Likelihood <darts.utils.likelihood_models.Likelihood>` models to be used for
             probabilistic forecasts. Default: ``None``.
