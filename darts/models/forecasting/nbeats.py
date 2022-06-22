@@ -132,7 +132,6 @@ class _Block(nn.Module):
         self.e = e
  
         self.sum_writer = tf.summary.create_file_writer('../hist')
-        print(self._parameters)
         # fully connected stack before fork
         self.linear_layer_stack_list = [nn.Linear(input_chunk_length, layer_width)]
         self.linear_layer_stack_list += [
@@ -173,13 +172,6 @@ class _Block(nn.Module):
             raise_log(ValueError("g_type not supported"), logger)
 
     def forward(self, x, i, j, e):
-        print("#=#=#=#=# MODEL #=#=#=#=#")
-        print("_Block number: ", i)
-        print("Location: nbeats.py -> _Block(...) -> forward(self, x)")
-        print("Dataset is loaded into forward: ")
-        print(x)
-        print("with batchsize:", x.shape[0])
-        
         batch_size = x.shape[0]
 
         # fully connected layer stack
@@ -298,13 +290,6 @@ class _Stack(nn.Module):
         self.blocks = nn.ModuleList(self.blocks_list)
 
     def forward(self, x, j, e):
-        
-        print("#=#=#=#=# MODEL #=#=#=#=#")
-        print("_Stack number: ", j)
-        print("Location: nbeats.py -> _Stack(...) -> forward(self, x)")
-        print("Dataset is loaded into forward: ")
-        print(x)
-        
         # One forecast vector per parameter in the distribution
         stack_forecast = torch.zeros(
             x.shape[0],
@@ -402,8 +387,6 @@ class _NBEATSModule(PLPastCovariatesModule):
         self.target_length = self.output_chunk_length * input_dim
 
         e = self.epochs_trained
-        print("##################### EPOCHS TRAINED ##################")
-        print(e)
 
         if generic_architecture:
             self.stacks_list = [
@@ -446,11 +429,7 @@ class _NBEATSModule(PLPastCovariatesModule):
             )
             self.stacks_list = [trend_stack, seasonality_stack]
 
-        
-        print("#=#=#=#=# MODEL INIT #=#=#=#=#")
-        print("Location: nbeats.py -> NBEATSModule")
-        print("Stacklist: ")
-        print(self.stacks_list)
+ 
               
         self.stacks = nn.ModuleList(self.stacks_list)
 
@@ -467,11 +446,6 @@ class _NBEATSModule(PLPastCovariatesModule):
         x = torch.reshape(x, (x.shape[0], self.input_chunk_length_multi, 1))
         # squeeze last dimension (because model is univariate)
         x = x.squeeze(dim=2)
-              
-        print("#=#=#=#=# MODEL #=#=#=#=#")
-        print("Location: nbeats.py -> NBEATSModule(...) -> forward(self, x)")
-        print("Dataset is loaded into forward: ")
-        print(x)
 
         # One vector of length target_length per parameter in the distribution
         y = torch.zeros(
@@ -486,8 +460,7 @@ class _NBEATSModule(PLPastCovariatesModule):
         for stack in self.stacks_list:
             # compute stack output
             e = self.epochs_trained
-            print("##################### EPOCHS TRAINED ##################")
-            print(e)
+
             stack_residual, stack_forecast = stack(x, j, e)
 
             # add stack forecast to final output
@@ -743,3 +716,7 @@ class NBEATSModel(PastCovariatesTorchModel):
             trend_polynomial_degree=self.trend_polynomial_degree,
             **self.pl_module_params,
         )
+    
+    
+    
+    
